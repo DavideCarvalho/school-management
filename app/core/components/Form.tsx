@@ -1,5 +1,6 @@
-import { useState, ReactNode, PropsWithoutRef } from "react"
+import React, { useState, ReactNode, PropsWithoutRef } from "react"
 import { Formik, FormikProps } from "formik"
+import { Button, Flex } from "@chakra-ui/react"
 import * as z from "zod"
 
 export interface FormProps<S extends z.ZodType<any, any>>
@@ -63,11 +64,13 @@ export function Form<S extends z.ZodType<any, any>>({
             </div>
           )}
 
-          {submitText && (
-            <button type="submit" disabled={isSubmitting}>
-              {submitText}
-            </button>
-          )}
+          <Flex width="full" align="center" justifyContent="center">
+            {submitText && (
+              <Button type="submit" disabled={isSubmitting} colorScheme="blue">
+                {submitText}
+              </Button>
+            )}
+          </Flex>
 
           <style global jsx>{`
             .form > * + * {

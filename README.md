@@ -33,8 +33,6 @@ DATABASE_URL=postgresql://<YOUR_DB_USERNAME>@localhost:5432/diario-escolar-blitz
 Runs your tests using Jest.
 
 ```
-blitz test
-or
 yarn test
 ```
 

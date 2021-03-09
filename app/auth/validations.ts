@@ -8,8 +8,8 @@ export const Signup = z.object({
 })
 
 export const Login = z.object({
-  email: z.string().email(),
-  password: z.string(),
+  email: z.string().email().nonempty("Email é obrigatório"),
+  password: z.string().nonempty("Senha é obrigatório"),
 })
 
 export const ForgotPassword = z.object({

@@ -8,24 +8,39 @@ import {
 } from "blitz"
 import { ErrorBoundary } from "react-error-boundary"
 import { queryCache } from "react-query"
+import { ChakraProvider } from "@chakra-ui/react"
 import LoginForm from "app/auth/components/LoginForm"
+import { Navbar } from "../core/components/Navbar"
 
 export default function App({ Component, pageProps }: AppProps) {
   const getLayout = Component.getLayout || ((page) => page)
   const router = useRouter()
 
   return (
-    <ErrorBoundary
-      FallbackComponent={RootErrorFallback}
-      resetKeys={[router.asPath]}
-      onReset={() => {
-        // This ensures the Blitz useQuery hooks will automatically refetch
-        // data any time you reset the error boundary
-        queryCache.resetErrorBoundaries()
-      }}
-    >
-      {getLayout(<Component {...pageProps} />)}
-    </ErrorBoundary>
+    <ChakraProvider>
+      <ErrorBoundary
+        FallbackComponent={RootErrorFallback}
+        resetKeys={[router.asPath]}
+        onReset={() => {
+          // This ensures the Blitz useQuery hooks will automatically refetch
+          // data any time you reset the error boundary
+          queryCache.resetErrorBoundaries()
+        }}
+      >
+        <Navbar />
+        <div style={{ height: "100%" }}>{getLayout(<Component {...pageProps} />)}</div>
+      </ErrorBoundary>
+      <style global jsx>{`
+        body {
+          height: 100vh;
+          width: 100vw;
+        }
+        #__next {
+          height: 100%;
+          width: 100%;
+        }
+      `}</style>
+    </ChakraProvider>
   )
 }
 

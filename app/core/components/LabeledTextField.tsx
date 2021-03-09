@@ -1,5 +1,6 @@
-import { forwardRef, PropsWithoutRef } from "react"
-import { useField, useFormikContext, ErrorMessage } from "formik"
+import { PropsWithoutRef } from "react"
+import { useField, useFormikContext } from "formik"
+import { FormControl, FormLabel, Input, FormErrorMessage } from "@chakra-ui/react"
 
 export interface LabeledTextFieldProps extends PropsWithoutRef<JSX.IntrinsicElements["input"]> {
   /** Field name. */
@@ -8,48 +9,20 @@ export interface LabeledTextFieldProps extends PropsWithoutRef<JSX.IntrinsicElem
   label: string
   /** Field type. Doesn't include radio buttons and checkboxes */
   type?: "text" | "password" | "email" | "number"
-  outerProps?: PropsWithoutRef<JSX.IntrinsicElements["div"]>
+  placeholder: string
 }
 
-export const LabeledTextField = forwardRef<HTMLInputElement, LabeledTextFieldProps>(
-  ({ name, label, outerProps, ...props }, ref) => {
-    const [input] = useField(name)
-    const { isSubmitting } = useFormikContext()
+export const LabeledTextField = ({ name, label, placeholder }) => {
+  const [input] = useField(name)
+  const { isSubmitting, errors } = useFormikContext<Record<string, string>>()
 
-    return (
-      <div {...outerProps}>
-        <label>
-          {label}
-          <input {...input} disabled={isSubmitting} {...props} ref={ref} />
-        </label>
-
-        <ErrorMessage name={name}>
-          {(msg) => (
-            <div role="alert" style={{ color: "red" }}>
-              {msg}
-            </div>
-          )}
-        </ErrorMessage>
-
-        <style jsx>{`
-          label {
-            display: flex;
-            flex-direction: column;
-            align-items: start;
-            font-size: 1rem;
-          }
-          input {
-            font-size: 1rem;
-            padding: 0.25rem 0.5rem;
-            border-radius: 3px;
-            border: 1px solid purple;
-            appearance: none;
-            margin-top: 0.5rem;
-          }
-        `}</style>
-      </div>
-    )
-  }
-)
+  return (
+    <FormControl id={name} isRequired isInvalid={errors?.name != null}>
+      <FormLabel>{label}</FormLabel>
+      <Input {...input} disabled={isSubmitting} placeholder={placeholder} />
+      <FormErrorMessage>{errors.name}</FormErrorMessage>
+    </FormControl>
+  )
+}
 
 export default LabeledTextField

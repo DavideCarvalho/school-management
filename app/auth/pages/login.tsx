@@ -1,4 +1,5 @@
 import { useRouter, BlitzPage } from "blitz"
+import { Flex, Box } from "@chakra-ui/react"
 import Layout from "app/core/layouts/Layout"
 import { LoginForm } from "app/auth/components/LoginForm"
 
@@ -7,12 +8,16 @@ const LoginPage: BlitzPage = () => {
 
   return (
     <div>
-      <LoginForm
-        onSuccess={() => {
-          const next = (router.query.next as string) ?? "/"
-          router.push(next)
-        }}
-      />
+      <Flex width="full" h="100vh" align="center" justifyContent="center">
+        <Box p={8} maxWidth="500px" borderWidth={1} borderRadius={8} boxShadow="lg">
+          <LoginForm
+            onSuccess={() => {
+              const next = (router.query.next as string) ?? "/"
+              router.push(next)
+            }}
+          />
+        </Box>
+      </Flex>
     </div>
   )
 }
