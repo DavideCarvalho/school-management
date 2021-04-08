@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "blitz dev",
     "build": "blitz build",
-    "start": "blitz build && blitz start --port 3000",
+    "start": "blitz start --port 3000",
+    "postinstall": "blitz build",
     "studio": "blitz prisma studio",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
     "test": "jest",
