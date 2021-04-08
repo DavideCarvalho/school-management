@@ -9,7 +9,7 @@
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
     "test": "jest",
     "test:watch": "jest --watch",
-    "deploy": "npm i && blitz build && blitz start -p 8080"
+    "deploy": "npm i && blitz build && blitz start -p 3000"
   },
   "prisma": {
     "schema": "db/schema.prisma"
