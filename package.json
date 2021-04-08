@@ -39,7 +39,7 @@
     "chakra-ui-autocomplete": "1.2.6",
     "chakra-ui-simple-autocomplete": "0.7.0",
     "formik": "2.2.6",
-    "framer-motion": "3.10.2",
+    "framer-motion": "3.10.6",
     "generate-password": "1.6.0",
     "prisma": "2.20.1",
     "react": "0.0.0-experimental-6a589ad71",
