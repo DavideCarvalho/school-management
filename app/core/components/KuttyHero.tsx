@@ -11,7 +11,7 @@ import {
   InputRightElement,
   SimpleGrid,
   useColorModeValue,
-  VisuallyHidden
+  VisuallyHidden,
 } from "@chakra-ui/react"
 
 const KuttyHero = () => {
@@ -67,7 +67,7 @@ const KuttyHero = () => {
               type="email"
               placeholder="Enter your email..."
               bg="white"
-              required="true"
+              required={true}
             />
             <Button
               w="full"
@@ -88,7 +88,7 @@ const KuttyHero = () => {
               type="email"
               placeholder="Enter your email..."
               bg="white"
-              required="true"
+              required={true}
             />
             <InputRightElement w="auto">
               <Button

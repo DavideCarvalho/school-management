@@ -23,7 +23,7 @@ export default function FeaturesHero() {
           mb={2}
           fontWeight="semibold"
           lineHeight="shorter"
-          color={useColorModeValue("gray.900")}
+          color={useColorModeValue("gray.900", "")}
         >
           {props.title}
         </chakra.h3>
@@ -43,7 +43,7 @@ export default function FeaturesHero() {
             lineHeight="8"
             fontWeight="extrabold"
             letterSpacing="tight"
-            color={useColorModeValue("gray.900")}
+            color={useColorModeValue("gray.900", "")}
           >
             O que oferecemos
           </chakra.p>

@@ -10,7 +10,7 @@ const CreateTopic = z
 
 export default resolver.pipe(resolver.zod(CreateTopic), resolver.authorize(), async (input) => {
   // TODO: in multi-tenant app, you must add validation to ensure correct tenant
-  const topic = await db.topic.create({ data: input })
+  const topic = await db.topic.create({ data: input as any })
 
   return topic
 })

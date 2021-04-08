@@ -6,9 +6,9 @@ import deleteTopic from "app/school/topics/mutations/deleteTopic"
 
 export const Topic = () => {
   const router = useRouter()
-  const topicId = useParam("topicId", "number")
+  const topicId = useParam("topicId", "string")
   const [deleteTopicMutation] = useMutation(deleteTopic)
-  const [topic] = useQuery(getTopic, { id: topicId })
+  const [topic] = useQuery(getTopic, { id: topicId! })
 
   return (
     <>

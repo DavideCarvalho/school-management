@@ -4,7 +4,7 @@ import * as z from "zod"
 
 const UpdateTopic = z
   .object({
-    id: z.number(),
+    id: z.string(),
     name: z.string(),
   })
   .nonstrict()
@@ -14,7 +14,7 @@ export default resolver.pipe(
   resolver.authorize(),
   async ({ id, ...data }) => {
     // TODO: in multi-tenant app, you must add validation to ensure correct tenant
-    const topic = await db.topic.update({ where: { id }, data })
+    const topic = await db.topic.update({ where: { id }, data: data as any })
 
     return topic
   }

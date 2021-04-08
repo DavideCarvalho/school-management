@@ -13,24 +13,24 @@ export const Student = () => {
   return (
     <>
       <Head>
-        <title>Student {student.id}</title>
+        <title>Student {student.slug}</title>
       </Head>
 
       <div>
-        <h1>Student {student.id}</h1>
+        <h1>Student {student.slug}</h1>
         <pre>{JSON.stringify(student, null, 2)}</pre>
 
-        <Link href={`/students/${student.id}/edit`}>
+        <Link href={`/students/${student.slug}/edit`}>
           <a>Edit</a>
         </Link>
 
         <button
           type="button"
           onClick={async () => {
-            if (window.confirm("This will be deleted")) {
-              await deleteStudentMutation({ id: student.id })
-              router.push("/students")
-            }
+            // if (window.confirm("This will be deleted")) {
+            //   await deleteStudentMutation({ id: student.id })
+            //   router.push("/students")
+            // }
           }}
           style={{ marginLeft: "0.5rem" }}
         >

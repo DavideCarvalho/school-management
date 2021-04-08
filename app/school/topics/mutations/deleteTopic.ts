@@ -4,7 +4,7 @@ import * as z from "zod"
 
 const DeleteTopic = z
   .object({
-    id: z.number(),
+    id: z.string(),
   })
   .nonstrict()
 

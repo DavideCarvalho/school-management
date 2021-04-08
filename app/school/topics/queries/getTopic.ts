@@ -4,7 +4,7 @@ import * as z from "zod"
 
 const GetTopic = z.object({
   // This accepts type of undefined, but is required at runtime
-  id: z.number().optional().refine(Boolean, "Required"),
+  id: z.string(),
 })
 
 export default resolver.pipe(resolver.zod(GetTopic), resolver.authorize(), async ({ id }) => {

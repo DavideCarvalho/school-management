@@ -1,8 +1,8 @@
 import React from "react"
 import { BlitzPage } from "blitz"
-import Layout from "../../core/layouts/Layout"
+import Layout from "app/core/layouts/Layout"
 import { Box, Center, Flex, Heading } from "@chakra-ui/react"
-import { DashboardCard } from "./DashboardCard"
+import { DashboardCard } from "app/core/components/DashboardCard"
 
 const DashboardPage: BlitzPage = () => {
   return (

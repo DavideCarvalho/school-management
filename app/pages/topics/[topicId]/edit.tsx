@@ -7,8 +7,8 @@ import { TopicForm, FORM_ERROR } from "app/school/topics/components/TopicForm"
 
 export const EditTopic = () => {
   const router = useRouter()
-  const topicId = useParam("topicId", "number")
-  const [topic, { setQueryData }] = useQuery(getTopic, { id: topicId })
+  const topicId = useParam("topicId", "string")
+  const [topic, { setQueryData }] = useQuery(getTopic, { id: topicId! })
   const [updateTopicMutation] = useMutation(updateTopic)
 
   return (
