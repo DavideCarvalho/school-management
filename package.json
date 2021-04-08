@@ -36,7 +36,7 @@
     "@emotion/styled": "11.1.5",
     "@prisma/client": "2.20.1",
     "blitz": "0.33.1",
-    "chakra-ui-autocomplete": "1.2.6",
+    "chakra-ui-autocomplete": "1.2.7",
     "chakra-ui-simple-autocomplete": "0.7.0",
     "formik": "2.2.6",
     "framer-motion": "3.10.2",
