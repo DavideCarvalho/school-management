@@ -5,7 +5,7 @@
     "dev": "blitz dev",
     "build": "blitz build",
     "start:prod": "npm install && blitz build && blitz start --port 3000",
-    "start": "blitz dev --port 3000",
+    "start": "npm install && blitz dev --port 3000",
     "studio": "blitz prisma studio",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
     "test": "jest",
