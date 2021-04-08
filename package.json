@@ -4,13 +4,11 @@
   "scripts": {
     "dev": "blitz dev",
     "build": "blitz build",
-    "start:old": "blitz start",
     "start": "npm i && blitz build && blitz start --port 3000",
     "studio": "blitz prisma studio",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
     "test": "jest",
     "test:watch": "jest --watch",
-    "deploy": "npm i && blitz build && blitz start -p 3000"
   },
   "prisma": {
     "schema": "db/schema.prisma"
