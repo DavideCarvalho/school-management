@@ -1,4 +1,4 @@
-import { resolver, SecurePassword, hash256 } from "blitz"
+import { hash256, resolver, SecurePassword } from "blitz"
 import db from "db"
 import { ResetPassword } from "../validations"
 import login from "./login"
@@ -31,7 +31,7 @@ export default resolver.pipe(resolver.zod(ResetPassword), async ({ password, tok
   }
 
   // 5. Since token is valid, now we can update the user's password
-  const hashedPassword = await SecurePassword.hash(password)
+  const hashedPassword = await SecurePassword.hash(password.trim())
   const user = await db.user.update({
     where: { id: savedToken.userId },
     data: { hashedPassword },

@@ -1,10 +1,11 @@
-import { useRouter, useMutation, BlitzPage } from "blitz"
-import { Flex, Heading, Center } from "@chakra-ui/react"
+import { BlitzPage, useMutation, useRouter } from "blitz"
+import { Center, Flex, Heading, useToast } from "@chakra-ui/react"
 import Layout from "app/core/layouts/Layout"
 import createSubject from "app/school/subjects/mutations/createSubject"
-import { SubjectForm, FORM_ERROR } from "app/school/subjects/components/SubjectForm"
+import { FORM_ERROR, SubjectForm } from "app/school/subjects/components/SubjectForm"
 
 const NewSubjectPage: BlitzPage = () => {
+  const toast = useToast()
   const router = useRouter()
   const [createSubjectMutation] = useMutation(createSubject)
 
@@ -27,7 +28,13 @@ const NewSubjectPage: BlitzPage = () => {
           onSubmit={async (values) => {
             try {
               await createSubjectMutation(values)
-              router.push(`/aulas`)
+              toast({
+                title: "Aula adicionada!",
+                description: "Aula adicionada com sucesso!",
+                status: "success",
+                isClosable: true,
+              })
+              await router.push(`/aulas`)
             } catch (error) {
               console.error(error)
               return {
@@ -42,6 +49,6 @@ const NewSubjectPage: BlitzPage = () => {
 }
 
 NewSubjectPage.authenticate = true
-NewSubjectPage.getLayout = (page) => <Layout title={"Create New Subject"}>{page}</Layout>
+NewSubjectPage.getLayout = (page) => <Layout title={"Criar nova aula"}>{page}</Layout>
 
 export default NewSubjectPage

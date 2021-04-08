@@ -1,5 +1,6 @@
 import { resolver } from "blitz"
 import db from "db"
+import slugify from "slugify"
 import * as z from "zod"
 
 const CreateClassroom = z
@@ -8,9 +9,13 @@ const CreateClassroom = z
   })
   .nonstrict()
 
-export default resolver.pipe(resolver.zod(CreateClassroom), resolver.authorize(), async (input) => {
-  // TODO: in multi-tenant app, you must add validation to ensure correct tenant
-  const classroom = await db.classroom.create({ data: input })
-
-  return classroom
-})
+export default resolver.pipe(
+  resolver.zod(CreateClassroom),
+  resolver.authorize(),
+  async (input, ctx) => {
+    const { schoolId } = await ctx.session.$getPrivateData()
+    return await db.classroom.create({
+      data: { ...input, schoolId, slug: slugify(input.name, { strict: true, lower: true }) },
+    })
+  }
+)

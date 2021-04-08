@@ -1,5 +1,5 @@
-import { useRouter, BlitzPage } from "blitz"
-import { Flex, Box } from "@chakra-ui/react"
+import { BlitzPage, useRouter } from "blitz"
+import { Box, Flex } from "@chakra-ui/react"
 import Layout from "app/core/layouts/Layout"
 import { LoginForm } from "app/auth/components/LoginForm"
 

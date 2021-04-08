@@ -6,13 +6,14 @@ interface GetClassroomsInput
 
 export default resolver.pipe(
   resolver.authorize(),
-  async ({ where, orderBy, skip = 0, take = 100 }: GetClassroomsInput) => {
-    // TODO: in multi-tenant app, you must add validation to ensure correct tenant
+  async ({ where, orderBy, skip = 0, take = 100 }: GetClassroomsInput, ctx) => {
+    const { schoolId } = await ctx.session.$getPrivateData()
     const { items: classrooms, hasMore, nextPage, count } = await paginate({
       skip,
       take,
-      count: () => db.classroom.count({ where }),
-      query: (paginateArgs) => db.classroom.findMany({ ...paginateArgs, where, orderBy }),
+      count: () => db.classroom.count({ where: { ...where, schoolId } }),
+      query: (paginateArgs) =>
+        db.classroom.findMany({ ...paginateArgs, where: { ...where, schoolId }, orderBy }),
     })
 
     return {

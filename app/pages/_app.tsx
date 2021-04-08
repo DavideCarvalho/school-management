@@ -1,11 +1,4 @@
-import {
-  AppProps,
-  ErrorComponent,
-  useRouter,
-  AuthenticationError,
-  AuthorizationError,
-  ErrorFallbackProps,
-} from "blitz"
+import { AppProps, AuthenticationError, AuthorizationError, ErrorComponent, ErrorFallbackProps, useRouter } from "blitz"
 import { ErrorBoundary } from "react-error-boundary"
 import { queryCache } from "react-query"
 import { ChakraProvider } from "@chakra-ui/react"

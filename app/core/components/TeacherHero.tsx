@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, Flex, Img, Heading, Stack } from "@chakra-ui/react"
+import { Box, Flex, Heading, Img, Stack } from "@chakra-ui/react"
 
 export default function TeacherHero({ title, subtitle, image, ...rest }: any) {
   return (

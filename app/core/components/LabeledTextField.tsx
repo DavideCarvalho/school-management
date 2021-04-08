@@ -1,6 +1,6 @@
-import { PropsWithoutRef } from "react"
+import { FC, PropsWithoutRef } from "react"
 import { useField, useFormikContext } from "formik"
-import { FormControl, FormLabel, Input, FormErrorMessage } from "@chakra-ui/react"
+import { FormControl, FormErrorMessage, FormLabel, Input } from "@chakra-ui/react"
 
 export interface LabeledTextFieldProps extends PropsWithoutRef<JSX.IntrinsicElements["input"]> {
   /** Field name. */
@@ -12,7 +12,7 @@ export interface LabeledTextFieldProps extends PropsWithoutRef<JSX.IntrinsicElem
   placeholder: string
 }
 
-export const LabeledTextField = ({ name, label, placeholder }) => {
+export const LabeledTextField: FC<LabeledTextFieldProps> = ({ name, label, placeholder }) => {
   const [input] = useField(name)
   const { isSubmitting, errors } = useFormikContext<Record<string, string>>()
 
@@ -24,5 +24,3 @@ export const LabeledTextField = ({ name, label, placeholder }) => {
     </FormControl>
   )
 }
-
-export default LabeledTextField

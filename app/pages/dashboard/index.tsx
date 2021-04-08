@@ -1,7 +1,7 @@
 import React from "react"
 import { BlitzPage } from "blitz"
 import Layout from "../../core/layouts/Layout"
-import { Box, Flex, Heading, Center } from "@chakra-ui/react"
+import { Box, Center, Flex, Heading } from "@chakra-ui/react"
 import { DashboardCard } from "./DashboardCard"
 
 const DashboardPage: BlitzPage = () => {
@@ -14,13 +14,13 @@ const DashboardPage: BlitzPage = () => {
         <Flex w="full">
           <DashboardCard
             title="Administração"
-            buttonsLabels={["materias", "salas", "professores", "alunos"]}
-            buttonsLinks={["/subjects"]}
+            buttonsLabels={["matérias", "salas", "professores", "alunos"]}
+            buttonsLinks={["/aulas", "/salas", "/professores", "/alunos"]}
           />
           <DashboardCard
             title="Professores"
-            buttonsLabels={["aulas", "alunos"]}
-            buttonsLinks={["/"]}
+            buttonsLabels={["conteúdos", "presenças", "observações", "notas"]}
+            buttonsLinks={["/topics", "/attendance", "/notes", "/grades"]}
           />
         </Flex>
       </Box>

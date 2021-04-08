@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { AuthenticationError, Link, useMutation } from "blitz"
-import { Box, Heading, FormControl, FormLabel, Input, Button } from "@chakra-ui/react"
+import { Box, Button, FormControl, FormLabel, Heading, Input } from "@chakra-ui/react"
 import { FormikProps, useFormik } from "formik"
 import { FormErrorMessage } from "app/auth/components/FormErrorMessage"
 import login from "app/auth/mutations/login"
@@ -11,7 +11,7 @@ type LoginFormProps = {
 }
 
 interface LoginFormState {
-  email: string
+  login: string
   password: string
 }
 
@@ -23,7 +23,7 @@ export const LoginForm = (props: LoginFormProps) => {
   const [loginMutation] = useMutation(login)
   const formik: FormikProps<LoginFormState> = useFormik<LoginFormState>({
     initialValues: {
-      email: "",
+      login: "",
       password: "",
     },
     validate: (values) => {
@@ -67,8 +67,8 @@ export const LoginForm = (props: LoginFormProps) => {
             type="email"
             placeholder="meu@email.com"
             size="lg"
-            name="email"
-            value={formik.values.email}
+            name="login"
+            value={formik.values.login}
             onChange={formik.handleChange}
             colorScheme="purple"
           />

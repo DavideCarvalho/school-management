@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, Alert, AlertIcon, AlertDescription } from "@chakra-ui/react"
+import { Alert, AlertDescription, AlertIcon, Box } from "@chakra-ui/react"
 
 export function FormErrorMessage({ message }: { message: string }) {
   return (

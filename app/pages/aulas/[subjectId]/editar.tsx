@@ -1,15 +1,15 @@
 import React, { Suspense } from "react"
-import { useRouter, useQuery, useMutation, useParam, BlitzPage } from "blitz"
+import { BlitzPage, useMutation, useParam, useQuery, useRouter } from "blitz"
 import Layout from "app/core/layouts/Layout"
 import getSubject from "app/school/subjects/queries/getSubject"
 import updateSubject from "app/school/subjects/mutations/updateSubject"
-import { SubjectForm, FORM_ERROR } from "app/school/subjects/components/SubjectForm"
+import { FORM_ERROR, SubjectForm } from "app/school/subjects/components/SubjectForm"
 import { Center, Flex, Heading } from "@chakra-ui/react"
 
 export const EditSubject = () => {
   const router = useRouter()
-  const subjectId = useParam("subjectId", "number")
-  const [subject, { setQueryData }] = useQuery(getSubject, { id: subjectId })
+  const subjectId = useParam("subjectId") as string
+  const [subject] = useQuery(getSubject, { id: subjectId })
   const [updateSubjectMutation] = useMutation(updateSubject)
 
   return (
@@ -24,12 +24,11 @@ export const EditSubject = () => {
           initialValues={subject}
           onSubmit={async (values) => {
             try {
-              const updated = await updateSubjectMutation({
+              await updateSubjectMutation({
                 id: subject.id,
                 ...values,
               })
-              await setQueryData(updated)
-              router.push(`/subjects`)
+              await router.push(`/aulas`)
             } catch (error) {
               console.error(error)
               return {

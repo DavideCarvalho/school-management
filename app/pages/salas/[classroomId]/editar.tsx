@@ -1,28 +1,27 @@
 import { Suspense } from "react"
-import { Head, Link, useRouter, useQuery, useMutation, useParam, BlitzPage } from "blitz"
+import { BlitzPage, Head, useMutation, useParam, useQuery, useRouter } from "blitz"
 import Layout from "app/core/layouts/Layout"
 import getClassroom from "app/school/classrooms/queries/getClassroom"
 import updateClassroom from "app/school/classrooms/mutations/updateClassroom"
 import { ClassroomForm, FORM_ERROR } from "app/school/classrooms/components/ClassroomForm"
+import { Flex, useToast } from "@chakra-ui/react"
 
 export const EditClassroom = () => {
+  const toast = useToast()
   const router = useRouter()
-  const classroomId = useParam("classroomId", "number")
-  const [classroom, { setQueryData }] = useQuery(getClassroom, { id: classroomId })
+  const classroomId = useParam("classroomId", "string")
+  const [classroom] = useQuery(getClassroom, { id: classroomId! })
   const [updateClassroomMutation] = useMutation(updateClassroom)
 
   return (
-    <>
-      <Head>
-        <title>Edit Classroom {classroom.id}</title>
-      </Head>
-
+    <Flex width="full" h="70vh" align="center" justifyContent="center">
       <div>
-        <h1>Edit Classroom {classroom.id}</h1>
-        <pre>{JSON.stringify(classroom)}</pre>
+        <Head>
+          <title>Editar sala</title>
+        </Head>
 
         <ClassroomForm
-          submitText="Update Classroom"
+          submitText="Atualizar Sala"
           // TODO use a zod schema for form validation
           //  - Tip: extract mutation's schema into a shared `validations.ts` file and
           //         then import and use it here
@@ -30,12 +29,17 @@ export const EditClassroom = () => {
           initialValues={classroom}
           onSubmit={async (values) => {
             try {
-              const updated = await updateClassroomMutation({
+              await updateClassroomMutation({
                 id: classroom.id,
                 ...values,
               })
-              await setQueryData(updated)
-              router.push(`/classrooms/${updated.id}`)
+              toast({
+                title: "Sala editada!",
+                description: "Sala editada com sucesso!",
+                status: "success",
+                isClosable: true,
+              })
+              await router.push(`/salas`)
             } catch (error) {
               console.error(error)
               return {
@@ -45,7 +49,7 @@ export const EditClassroom = () => {
           }}
         />
       </div>
-    </>
+    </Flex>
   )
 }
 
@@ -55,12 +59,6 @@ const EditClassroomPage: BlitzPage = () => {
       <Suspense fallback={<div>Loading...</div>}>
         <EditClassroom />
       </Suspense>
-
-      <p>
-        <Link href="/classrooms">
-          <a>Classrooms</a>
-        </Link>
-      </p>
     </div>
   )
 }

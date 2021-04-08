@@ -1,17 +1,20 @@
-import { resolver, NotFoundError } from "blitz"
+import { NotFoundError, resolver } from "blitz"
 import db from "db"
 import * as z from "zod"
 
 const GetClassroom = z.object({
-  // This accepts type of undefined, but is required at runtime
-  id: z.number().optional().refine(Boolean, "Required"),
+  id: z.string(),
 })
 
-export default resolver.pipe(resolver.zod(GetClassroom), resolver.authorize(), async ({ id }) => {
-  // TODO: in multi-tenant app, you must add validation to ensure correct tenant
-  const classroom = await db.classroom.findFirst({ where: { id } })
+export default resolver.pipe(
+  resolver.zod(GetClassroom),
+  resolver.authorize(),
+  async ({ id }, ctx) => {
+    const { schoolId } = await ctx.session.$getPrivateData()
+    const classroom = await db.classroom.findFirst({ where: { id, schoolId } })
 
-  if (!classroom) throw new NotFoundError()
+    if (!classroom) throw new NotFoundError()
 
-  return classroom
-})
+    return classroom
+  }
+)

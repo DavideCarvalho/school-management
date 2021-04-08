@@ -15,7 +15,7 @@ export const DashboardCard: FC<Props> = ({ children, title, buttonsLabels, butto
       <Flex w="full" direction="column">
         {buttonsLabels.map((label, index) => {
           return (
-            <Link href={buttonsLinks[index] || "#"}>
+            <Link key={index} href={buttonsLinks[index] || "#"}>
               <Button colorScheme="blue" size="lg" m={2}>
                 {label}
               </Button>

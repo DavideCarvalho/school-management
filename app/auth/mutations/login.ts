@@ -1,10 +1,10 @@
-import { resolver, SecurePassword, AuthenticationError } from "blitz"
+import { AuthenticationError, resolver, SecurePassword } from "blitz"
 import db from "db"
 import { Login } from "../validations"
 import { Role } from "types"
 
-export const authenticateUser = async (email: string, password: string) => {
-  const user = await db.user.findFirst({ where: { email } })
+export const authenticateUser = async (login: string, password: string) => {
+  const user = await db.user.findFirst({ where: { login } })
   if (!user) throw new AuthenticationError()
 
   const result = await SecurePassword.verify(user.hashedPassword, password)
@@ -19,11 +19,18 @@ export const authenticateUser = async (email: string, password: string) => {
   return rest
 }
 
-export default resolver.pipe(resolver.zod(Login), async ({ email, password }, ctx) => {
+export default resolver.pipe(resolver.zod(Login), async ({ login, password }, ctx) => {
+  const userTypes = {
+    PROFESSOR: "professor",
+    STUDENT: "student",
+    SCHOOL_ADMIN: "schoolAdmin",
+  }
   // This throws an error if credentials are invalid
-  const user = await authenticateUser(email, password)
+  const user = await authenticateUser(login, password)
 
-  await ctx.session.$create({ userId: user.id, role: user.role as Role })
+  const userRole = await db[userTypes[user.role as Role]].findFirst({ where: { userId: user.id } })
+
+  await ctx.session.$create({ userId: user.id, role: user.role as Role }, { ...user, ...userRole })
 
   return user
 })

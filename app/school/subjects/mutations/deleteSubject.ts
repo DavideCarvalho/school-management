@@ -4,13 +4,17 @@ import * as z from "zod"
 
 const DeleteSubject = z
   .object({
-    id: z.number(),
+    id: z.string(),
   })
   .nonstrict()
 
-export default resolver.pipe(resolver.zod(DeleteSubject), resolver.authorize(), async ({ id }) => {
-  // TODO: in multi-tenant app, you must add validation to ensure correct tenant
-  const subject = await db.subject.deleteMany({ where: { id } })
+export default resolver.pipe(
+  resolver.zod(DeleteSubject),
+  resolver.authorize(),
+  async ({ id }, ctx) => {
+    const { schoolId } = await ctx.session.$getPrivateData()
+    const subject = await db.subject.deleteMany({ where: { id, schoolId } })
 
-  return subject
-})
+    return subject
+  }
+)

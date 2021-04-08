@@ -1,4 +1,4 @@
-import { NotFoundError, SecurePassword, resolver } from "blitz"
+import { NotFoundError, resolver, SecurePassword } from "blitz"
 import db from "db"
 import { authenticateUser } from "./login"
 import { ChangePassword } from "../validations"
@@ -12,7 +12,7 @@ export default resolver.pipe(
 
     await authenticateUser(user.email, currentPassword)
 
-    const hashedPassword = await SecurePassword.hash(newPassword)
+    const hashedPassword = await SecurePassword.hash(newPassword.trim())
     await db.user.update({
       where: { id: user.id },
       data: { hashedPassword },

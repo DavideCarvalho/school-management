@@ -13,20 +13,28 @@ generator client {
 // --------------------------------------
 
 model User {
-  id             Int      @id @default(autoincrement())
+  id             String   @id @default(uuid())
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
-  name           String?
-  email          String   @unique
+  name           String
+  email          String?  @unique
+  login          String   @unique
   hashedPassword String?
-  role           String   @default("USER")
+  role           String   @default("STUDENT")
 
-  tokens   Token[]
-  sessions Session[]
+  tokens      Token[]
+  sessions    Session[]
+  Student     Student[]
+  Professor   Professor[]
+  Accountable Accountable[]
+
+
+  //  AccountableUserAccount Accountable[] @relation(name: "AccountableUserAccount")
+  //  AccountableStudent     Accountable[] @relation(name: "AccountableStudent")
 }
 
 model Session {
-  id                 Int       @id @default(autoincrement())
+  id                 String    @id @default(uuid())
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt
   expiresAt          DateTime?
@@ -36,12 +44,12 @@ model Session {
   publicData         String?
   privateData        String?
 
-  user   User? @relation(fields: [userId], references: [id])
-  userId Int?
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String?
 }
 
 model Token {
-  id          Int      @id @default(autoincrement())
+  id          String   @id @default(uuid())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   hashedToken String
@@ -51,10 +59,137 @@ model Token {
   expiresAt   DateTime
   sentTo      String
 
-  user   User @relation(fields: [userId], references: [id])
-  userId Int
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
 
   @@unique([hashedToken, type])
+}
+
+model Subject {
+  id                     String                   @id @default(uuid())
+  name                   String
+  slug                   String
+  schoolId               String
+  School                 School                   @relation(fields: [schoolId], references: [id])
+  ProfessorsOnClassrooms ProfessorsOnClassrooms[]
+  Topic                  Topic[]
+}
+
+model Classroom {
+  id                     String                   @id @default(uuid())
+  name                   String
+  slug                   String
+  schoolId               String
+  School                 School                   @relation(fields: [schoolId], references: [id])
+  ProfessorsOnClassrooms ProfessorsOnClassrooms[]
+  Student                Student[]
+  Topic                  Topic[]
+}
+
+model School {
+  id        String      @id @default(uuid())
+  name      String
+  state     String
+  city      String
+  Subject   Subject[]
+  Classroom Classroom[]
+  Student   Student[]
+}
+
+model Student {
+  userId        String
+  schoolId      String
+  classroomId   String
+  accountableId String
+  slug          String      @unique
+  User          User        @relation(references: [id], fields: [userId])
+  School        School      @relation(references: [id], fields: [schoolId])
+  Classroom     Classroom   @relation(references: [id], fields: [classroomId])
+  Accountable   Accountable @relation(references: [userId, studentId], fields: [accountableId, userId])
+
+  StudentOnAttendance StudentOnAttendance[]
+  @@id([userId, schoolId])
+}
+
+model Accountable {
+  userId    String
+  studentId String
+  slug      String   @unique
+  User      User     @relation(references: [id], fields: [userId])
+  Student   Student?
+
+  @@id([userId, studentId])
+}
+
+model Professor {
+  userId                 String
+  schoolId               String
+  slug                   String                   @unique
+  ProfessorsOnClassrooms ProfessorsOnClassrooms[]
+  User                   User                     @relation(references: [id], fields: [userId])
+
+  Topic               Topic[]
+  Attendance          Attendance[]
+  StudentOnAttendance StudentOnAttendance[]
+  @@id([userId, schoolId])
+}
+
+model ProfessorsOnClassrooms {
+  professorUserId   String
+  professorSchoolId String
+  classroomId       String
+  subjectId         String
+  createdAt         DateTime  @default(now())
+  Professor         Professor @relation(references: [userId, schoolId], fields: [professorUserId, professorSchoolId])
+  Classroom         Classroom @relation(references: [id], fields: [classroomId])
+  Subject           Subject   @relation(references: [id], fields: [subjectId])
+
+  @@id([professorUserId, professorSchoolId, classroomId, subjectId])
+}
+
+model Topic {
+  id                String    @id @default(uuid())
+  classroomId       String
+  subjectId         String
+  professorUserId   String
+  professorSchoolId String
+  date              DateTime
+  description       String
+  Professor         Professor @relation(references: [userId, schoolId], fields: [professorUserId, professorSchoolId])
+  Classroom         Classroom @relation(references: [id], fields: [classroomId])
+  Subject           Subject   @relation(references: [id], fields: [subjectId])
+
+  Attendance Attendance[]
+}
+
+model Attendance {
+  topicId         String
+  classroomId     String
+  subjectId       String
+  professorUserId String
+  schoolId        String
+  date            DateTime
+  Topic           Topic     @relation(references: [id], fields: [topicId])
+  Professor       Professor @relation(references: [userId, schoolId], fields: [professorUserId, schoolId])
+
+
+  StudentOnAttendance StudentOnAttendance[]
+  @@id([classroomId, subjectId, professorUserId, schoolId])
+}
+
+model StudentOnAttendance {
+  classroomId     String
+  subjectId       String
+  professorUserId String
+  schoolId        String
+  date            DateTime
+  studentUserId   String
+
+  Professor  Professor  @relation(references: [userId, schoolId], fields: [professorUserId, schoolId])
+  Student    Student    @relation(references: [userId, schoolId], fields: [studentUserId, schoolId])
+  Attendance Attendance @relation(references: [classroomId, subjectId, professorUserId, schoolId], fields: [classroomId, subjectId, professorUserId, schoolId])
+
+  @@id([classroomId, subjectId, schoolId, professorUserId, date, studentUserId])
 }
 
 // NOTE: It's highly recommended to use an enum for the token type

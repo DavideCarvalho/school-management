@@ -6,13 +6,14 @@ interface GetSubjectsInput
 
 export default resolver.pipe(
   resolver.authorize(),
-  async ({ where, orderBy, skip = 0, take = 100 }: GetSubjectsInput) => {
-    // TODO: in multi-tenant app, you must add validation to ensure correct tenant
+  async ({ where, orderBy, skip = 0, take = 100 }: GetSubjectsInput, ctx) => {
+    const { schoolId } = await ctx.session.$getPrivateData()
     const { items: subjects, hasMore, nextPage, count } = await paginate({
       skip,
       take,
-      count: () => db.subject.count({ where }),
-      query: (paginateArgs) => db.subject.findMany({ ...paginateArgs, where, orderBy }),
+      count: () => db.subject.count({ where: { ...where, schoolId } }),
+      query: (paginateArgs) =>
+        db.subject.findMany({ ...paginateArgs, where: { ...where, schoolId }, orderBy }),
     })
 
     return {

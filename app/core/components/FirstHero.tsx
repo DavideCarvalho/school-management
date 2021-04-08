@@ -1,6 +1,6 @@
 import React from "react"
 import { Link } from "blitz"
-import { Box, Button, Flex, Image, Heading, Stack } from "@chakra-ui/react"
+import { Box, Button, Flex, Heading, Image, Stack } from "@chakra-ui/react"
 
 export default function FirstHero({ title, subtitle, image, ctaLink, ctaText, ...rest }: any) {
   return (

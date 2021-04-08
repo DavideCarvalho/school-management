@@ -1,21 +1,9 @@
 import React, { Suspense } from "react"
-import { Head, Link, usePaginatedQuery, useRouter, BlitzPage, useMutation } from "blitz"
+import { BlitzPage, Head, Link, useMutation, usePaginatedQuery, useRouter } from "blitz"
 import Layout from "app/core/layouts/Layout"
 import getSubjects from "app/school/subjects/queries/getSubjects"
-import {
-  Flex,
-  Table,
-  Thead,
-  Tbody,
-  Th,
-  Tr,
-  Td,
-  IconButton,
-  Button,
-  Heading,
-  Center,
-} from "@chakra-ui/react"
-import { ArrowBackIcon, ArrowForwardIcon, EditIcon, DeleteIcon } from "@chakra-ui/icons"
+import { Button, Center, Flex, Heading, IconButton, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react"
+import { ArrowBackIcon, ArrowForwardIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons"
 import deleteSubject from "../../school/subjects/mutations/deleteSubject"
 
 const ITEMS_PER_PAGE = 5
@@ -54,9 +42,9 @@ export const SubjectsList = () => {
                   </Link>
                   <IconButton
                     onClick={async () => {
-                      if (window.confirm("This will be deleted")) {
+                      if (window.confirm("Tem certeza que deseja apagar essa aula?")) {
                         await deleteSubjectMutation({ id: subject.id })
-                        router.push("/subjects")
+                        await router.push("/aulas")
                       }
                     }}
                     ml="5px"
@@ -92,7 +80,7 @@ export const SubjectsList = () => {
       </Flex>
 
       <Flex mt="5px" width="full" align="center" justifyContent="center">
-        <Link href="/aulas/nova">
+        <Link href="/aulas/novo">
           <Button colorScheme="blue">Criar aula</Button>
         </Link>
       </Flex>
@@ -105,7 +93,7 @@ const SubjectsPage: BlitzPage = () => {
     <Flex width="full" h="100%" align="center" justifyContent="center">
       <div>
         <Head>
-          <title>Subjects</title>
+          <title>Aulas</title>
         </Head>
         <Center mb="10px">
           <Heading as="h3" size="lg">
