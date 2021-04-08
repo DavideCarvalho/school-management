@@ -97,7 +97,7 @@ export const EditProfessor = () => {
                 status: "success",
                 isClosable: true,
               })
-              await router.push(`/professores`)
+              await router.push(`/escola/admin/professores`)
             } catch (error) {
               console.error(error)
               return {
@@ -128,7 +128,8 @@ const EditProfessorPage: BlitzPage = () => {
   )
 }
 
-EditProfessorPage.authenticate = true
+EditProfessorPage.authenticate = { redirectTo: "/login" }
+EditProfessorPage.suppressFirstRenderFlicker = true
 EditProfessorPage.getLayout = (page) => <Layout>{page}</Layout>
 
 export default EditProfessorPage

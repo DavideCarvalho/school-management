@@ -1,17 +1,30 @@
-import { Suspense } from "react"
+import React, { Suspense } from "react"
 import { BlitzPage, Head, Link, useMutation, usePaginatedQuery, useRouter } from "blitz"
-import { Button, Center, Flex, Heading, IconButton, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react"
-import { ArrowBackIcon, ArrowForwardIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons"
 import Layout from "app/core/layouts/Layout"
-import getProfessors from "app/school/professors/queries/getProfessors"
-import deleteProfessor from "app/school/professors/mutations/deleteProfessor"
+import getSubjects from "app/school/subjects/queries/getSubjects"
+import {
+  Button,
+  Center,
+  Flex,
+  Heading,
+  IconButton,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+} from "@chakra-ui/react"
+import { ArrowBackIcon, ArrowForwardIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons"
+import deleteSubject from "app/school/subjects/mutations/deleteSubject"
 
-const ITEMS_PER_PAGE = 10
+const ITEMS_PER_PAGE = 5
 
-export const ProfessorsList = () => {
+export const SubjectsList = () => {
   const router = useRouter()
   const page = Number(router.query.page) || 0
-  const [{ professors, hasMore }] = usePaginatedQuery(getProfessors, {
+  const [{ subjects, hasMore }] = usePaginatedQuery(getSubjects, {
+    orderBy: { id: "asc" },
     skip: ITEMS_PER_PAGE * page,
     take: ITEMS_PER_PAGE,
   })
@@ -19,7 +32,7 @@ export const ProfessorsList = () => {
   const goToPreviousPage = () => router.push({ query: { page: page - 1 } })
   const goToNextPage = () => router.push({ query: { page: page + 1 } })
 
-  const [deleteProfessorMutation] = useMutation(deleteProfessor)
+  const [deleteSubjectMutation] = useMutation(deleteSubject)
 
   return (
     <div>
@@ -27,29 +40,27 @@ export const ProfessorsList = () => {
         <Thead>
           <Tr>
             <Th>Nome</Th>
-            <Th>Quantidade de salas</Th>
             <Th>Ações</Th>
           </Tr>
         </Thead>
         <Tbody>
-          {professors.map((professor) => (
-            <Tr key={professor.slug}>
-              <Td>{professor.User.name}</Td>
-              <Td>{professor.ProfessorsOnClassrooms.length}</Td>
+          {subjects.map((subject) => (
+            <Tr key={subject.id}>
+              <Td>{subject.name}</Td>
               <Td>
                 <div>
-                  <Link href={`/professores/${professor.slug}/editar`}>
+                  <Link href={`/aulas/${subject.id}/editar`}>
                     <IconButton aria-label="editar aula" icon={<EditIcon />} colorScheme="blue" />
                   </Link>
                   <IconButton
                     onClick={async () => {
                       if (window.confirm("Tem certeza que deseja apagar essa aula?")) {
-                        await deleteProfessorMutation({ userId: professor.User.id })
-                        await router.push("/professores")
+                        await deleteSubjectMutation({ id: subject.id })
+                        await router.push("/aulas")
                       }
                     }}
                     ml="5px"
-                    aria-label="excluir professor?"
+                    aria-label="excluir aula"
                     icon={<DeleteIcon />}
                     colorScheme="blue"
                   />
@@ -81,36 +92,36 @@ export const ProfessorsList = () => {
       </Flex>
 
       <Flex mt="5px" width="full" align="center" justifyContent="center">
-        <Link href="/professors/new">
-          <Button colorScheme="blue">Adicionar professor</Button>
+        <Link href="/escola/admin/aulas/novo">
+          <Button colorScheme="blue">Criar aula</Button>
         </Link>
       </Flex>
     </div>
   )
 }
 
-const ProfessorsPage: BlitzPage = () => {
+const SubjectsPage: BlitzPage = () => {
   return (
-    <Flex width="full" h="80%" align="center" justifyContent="center">
+    <Flex width="full" h="100%" align="center" justifyContent="center">
       <div>
         <Head>
-          <title>Professores</title>
+          <title>Aulas</title>
         </Head>
         <Center mb="10px">
           <Heading as="h3" size="lg">
-            Professores
+            Aulas
           </Heading>
         </Center>
-
         <Suspense fallback={<div>Loading...</div>}>
-          <ProfessorsList />
+          <SubjectsList />
         </Suspense>
       </div>
     </Flex>
   )
 }
 
-ProfessorsPage.authenticate = true
-ProfessorsPage.getLayout = (page) => <Layout>{page}</Layout>
+SubjectsPage.authenticate = { redirectTo: "/login" }
+SubjectsPage.suppressFirstRenderFlicker = true
+SubjectsPage.getLayout = (page) => <Layout>{page}</Layout>
 
-export default ProfessorsPage
+export default SubjectsPage

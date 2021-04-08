@@ -39,7 +39,7 @@ export const EditClassroom = () => {
                 status: "success",
                 isClosable: true,
               })
-              await router.push(`/salas`)
+              await router.push(`/escola/admin/salas`)
             } catch (error) {
               console.error(error)
               return {
@@ -63,7 +63,8 @@ const EditClassroomPage: BlitzPage = () => {
   )
 }
 
-EditClassroomPage.authenticate = true
+EditClassroomPage.authenticate = { redirectTo: "/login" }
+EditClassroomPage.suppressFirstRenderFlicker = true
 EditClassroomPage.getLayout = (page) => <Layout>{page}</Layout>
 
 export default EditClassroomPage

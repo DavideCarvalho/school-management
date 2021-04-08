@@ -57,7 +57,8 @@ const ShowStudentPage: BlitzPage = () => {
   )
 }
 
-ShowStudentPage.authenticate = true
+ShowStudentPage.authenticate = { redirectTo: "/login" }
+ShowStudentPage.suppressFirstRenderFlicker = true
 ShowStudentPage.getLayout = (page) => <Layout>{page}</Layout>
 
 export default ShowStudentPage

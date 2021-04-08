@@ -36,7 +36,7 @@ const NewClassroomPage: BlitzPage = () => {
                 status: "success",
                 isClosable: true,
               })
-              await router.push(`/salas`)
+              await router.push(`/escola/admin/salas`)
             } catch (error) {
               console.error(error)
               return {
@@ -50,7 +50,8 @@ const NewClassroomPage: BlitzPage = () => {
   )
 }
 
-NewClassroomPage.authenticate = true
+NewClassroomPage.authenticate = { redirectTo: "/login" }
+NewClassroomPage.suppressFirstRenderFlicker = true
 NewClassroomPage.getLayout = (page) => <Layout title={"Create New Classroom"}>{page}</Layout>
 
 export default NewClassroomPage

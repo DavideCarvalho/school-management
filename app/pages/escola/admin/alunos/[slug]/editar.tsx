@@ -48,7 +48,7 @@ export const EditStudent = () => {
                 isClosable: true,
               })
               await refetchStudent()
-              await router.push(`/alunos`)
+              await router.push(`/escola/admin/alunos`)
             } catch (error) {
               console.error(error)
               return {
@@ -72,7 +72,8 @@ const EditStudentPage: BlitzPage = () => {
   )
 }
 
-EditStudentPage.authenticate = true
+EditStudentPage.authenticate = { redirectTo: "/login" }
+EditStudentPage.suppressFirstRenderFlicker = true
 EditStudentPage.getLayout = (page) => <Layout>{page}</Layout>
 
 export default EditStudentPage

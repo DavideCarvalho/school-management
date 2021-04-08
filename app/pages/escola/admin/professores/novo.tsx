@@ -56,7 +56,7 @@ const NewProfessorPage: BlitzPage = () => {
                   status: "success",
                   isClosable: true,
                 })
-                await router.push(`/professores`)
+                await router.push(`/escola/admin/professores`)
               } catch (error) {
                 console.error(error)
                 return {
@@ -71,7 +71,8 @@ const NewProfessorPage: BlitzPage = () => {
   )
 }
 
-NewProfessorPage.authenticate = true
+NewProfessorPage.authenticate = { redirectTo: "/login" }
+NewProfessorPage.suppressFirstRenderFlicker = true
 NewProfessorPage.getLayout = (page) => <Layout title={"Adicionar novo professor"}>{page}</Layout>
 
 export default NewProfessorPage

@@ -34,7 +34,7 @@ const NewSubjectPage: BlitzPage = () => {
                 status: "success",
                 isClosable: true,
               })
-              await router.push(`/aulas`)
+              await router.push(`/escola/admin/aulas`)
             } catch (error) {
               console.error(error)
               return {
@@ -48,7 +48,8 @@ const NewSubjectPage: BlitzPage = () => {
   )
 }
 
-NewSubjectPage.authenticate = true
+NewSubjectPage.authenticate = { redirectTo: "/login" }
+NewSubjectPage.suppressFirstRenderFlicker = true
 NewSubjectPage.getLayout = (page) => <Layout title={"Criar nova aula"}>{page}</Layout>
 
 export default NewSubjectPage

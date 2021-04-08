@@ -1,6 +1,20 @@
 import React, { Suspense } from "react"
 import { Head, Link, usePaginatedQuery, useRouter, BlitzPage, useMutation, useSession } from "blitz"
-import { Flex, IconButton, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react"
+import { formatDistance } from "date-fns"
+import { ptBR } from "date-fns/locale"
+import {
+  Button,
+  Center,
+  Flex,
+  Heading,
+  IconButton,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+} from "@chakra-ui/react"
 import { ArrowBackIcon, ArrowForwardIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons"
 import Layout from "app/core/layouts/Layout"
 import getTopics from "app/school/topics/queries/getTopics"
@@ -22,20 +36,25 @@ export const TopicsList = () => {
 
   const goToPreviousPage = () => router.push({ query: { page: page - 1 } })
   const goToNextPage = () => router.push({ query: { page: page + 1 } })
+  const isProfessor = session.role !== "PROFESSOR"
 
   return (
     <div>
       <Table variant="simple" colorScheme="blue">
         <Thead>
           <Tr>
-            {session.role !== "PROFESSOR" && <Th>Nome do professor</Th>}
+            {!isProfessor && <Th>Nome do professor</Th>}
+            <Th>Dia</Th>
+            <Th>Descrição</Th>
             <Th>Ações</Th>
           </Tr>
         </Thead>
         <Tbody>
           {topics.map((topic) => (
             <Tr key={topic.id}>
-              {session.role !== "PROFESSOR" && <Td>{topic.Professor.User.name}</Td>}
+              {!isProfessor && <Td>{topic.Professor.User.name}</Td>}
+              <Td>{formatDistance(topic.date, new Date(), { addSuffix: true, locale: ptBR })}</Td>
+              <Td>{topic.description}</Td>
               <Td>
                 <div>
                   <Link href={`/topics/${topic.id}`}>
@@ -79,33 +98,38 @@ export const TopicsList = () => {
           icon={<ArrowForwardIcon />}
         />
       </Flex>
+
+      <Flex mt="5px" width="full" align="center" justifyContent="center">
+        <Link href="/topics/new">
+          <Button colorScheme="blue">Criar matéria</Button>
+        </Link>
+      </Flex>
     </div>
   )
 }
 
 const TopicsPage: BlitzPage = () => {
   return (
-    <>
-      <Head>
-        <title>Topics</title>
-      </Head>
-
+    <Flex width="full" h="100%" align="center" justifyContent="center">
       <div>
-        <p>
-          <Link href="/topics/new">
-            <a>Create Topic</a>
-          </Link>
-        </p>
-
+        <Head>
+          <title>Matérias</title>
+        </Head>
+        <Center mb="10px">
+          <Heading as="h3" size="lg">
+            Aulas
+          </Heading>
+        </Center>
         <Suspense fallback={<div>Loading...</div>}>
           <TopicsList />
         </Suspense>
       </div>
-    </>
+    </Flex>
   )
 }
 
-TopicsPage.authenticate = true
+TopicsPage.authenticate = { redirectTo: "/login" }
+TopicsPage.suppressFirstRenderFlicker = true
 TopicsPage.getLayout = (page) => <Layout>{page}</Layout>
 
 export default TopicsPage

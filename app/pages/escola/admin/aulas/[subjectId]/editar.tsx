@@ -28,7 +28,7 @@ export const EditSubject = () => {
                 id: subject.id,
                 ...values,
               })
-              await router.push(`/aulas`)
+              await router.push(`/escola/admin/aulas`)
             } catch (error) {
               console.error(error)
               return {
@@ -59,7 +59,8 @@ const EditSubjectPage: BlitzPage = () => {
   )
 }
 
-EditSubjectPage.authenticate = true
+EditSubjectPage.authenticate = { redirectTo: "/login" }
+EditSubjectPage.suppressFirstRenderFlicker = true
 EditSubjectPage.getLayout = (page) => <Layout>{page}</Layout>
 
 export default EditSubjectPage
