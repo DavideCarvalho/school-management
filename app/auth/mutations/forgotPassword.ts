@@ -26,7 +26,7 @@ export default resolver.pipe(resolver.zod(ForgotPassword), async ({ email }) => 
         type: "RESET_PASSWORD",
         expiresAt,
         hashedToken,
-        sentTo: user.email,
+        sentTo: user.email!,
       },
     })
     // 6. Send the email
